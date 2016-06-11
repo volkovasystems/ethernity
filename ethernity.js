@@ -106,7 +106,7 @@ Ethernity.prototype.initialize = function initialize( date ){
 		return this;
 
 	}else{
-		throw new Error( "invalid date" );
+		return Ethernity( new Date( ) );
 	}
 };
 
