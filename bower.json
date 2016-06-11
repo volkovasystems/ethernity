@@ -1,0 +1,27 @@
+{
+  "name": "ethernity",
+  "description": "Persist time as true time.",
+  "main": "ethernity.js",
+  "authors": [
+    "Richeve S. Bebedor <richeve.bebedor@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "true-time",
+    "eternity"
+  ],
+  "homepage": "https://github.com/volkovasystems/ethernity",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "moment": "^2.13.0",
+    "diatom": "^0.0.4",
+    "harden": "^0.3.1",
+    "u200b": "^0.0.5"
+  }
+}
