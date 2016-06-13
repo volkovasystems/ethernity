@@ -90,8 +90,8 @@ if( typeof window != "undefined" &&
 var Ethernity = diatom( "Ethernity" );
 
 Ethernity.prototype.initialize = function initialize( date ){
-	if( typeof date == "string"
-		date.length == 31
+	if( typeof date == "string" &&
+		date.length == 31 &&
 		/^\-*[\d\u200b]{30}$/.test( date ) )
 	{
 		this.parse( );
