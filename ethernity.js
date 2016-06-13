@@ -117,6 +117,8 @@ Ethernity.prototype.initialize = function initialize( date ){
 		date.length == 31 &&
 		/^\-*[\d\u200b]{30}$/.test( date ) )
 	{
+		this.date = date;
+
 		this.parse( );
 
 		return this;
@@ -179,7 +181,16 @@ Ethernity.prototype.persist = function persist( ){
 	@end-method-documentation
 */
 Ethernity.prototype.parse = function parse( ){
-	var date = U200b( this.date ).separate( );
+	var date = this.date;
+	if( typeof this.date == "string" ){
+		date = U200b( this.date ).separate( );
+
+	}else if( this.trueTime ){
+		date = U200b( this.trueTime ).separate( );
+
+	}else{
+		throw new Error( "date not specified" );
+	}
 
 	var polarity = parseInt( date[ 0 ] + 1 );
 
