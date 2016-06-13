@@ -58,6 +58,7 @@
 */
 
 if( typeof window == "undefined" ){
+	var asea = require( "asea" );
 	var diatom = require( "diatom" );
 	var harden = require( "harden" );
 	var moment = require( "moment" );
@@ -66,36 +67,50 @@ if( typeof window == "undefined" ){
 }
 
 if( typeof window != "undefined" &&
+	!( "asea" in window ) )
+{
+	throw new Error( "asea is not defined" );
+}
+
+if( asea.client &&
 	!( "diatom" in window ) )
 {
 	throw new Error( "diatom is not defined" );
 }
 
-if( typeof window != "undefined" &&
+if( asea.client &&
 	!( "harden" in window ) )
 {
 	throw new Error( "harden is not defined" );
 }
 
-if( typeof window != "undefined" &&
+if( asea.client &&
 	!( "moment" in window ) )
 {
 	throw new Error( "moment is not defined" );
 }
 
-if( typeof window != "undefined" &&
+if( asea.client &&
 	!( "raze" in window ) )
 {
 	throw new Error( "raze is not defined" );
 }
 
-if( typeof window != "undefined" &&
+if( asea.client &&
 	!( "U200b" in window ) )
 {
 	throw new Error( "U200b is not defined" );
 }
 
 var Ethernity = diatom( "Ethernity" );
+
+Ethernity.prototype.toString = function toString( ){
+	return this.trueTime;
+};
+
+Ethernity.prototype.valueOf = function valueOf( ){
+	return this.trueTime;
+};
 
 Ethernity.prototype.initialize = function initialize( date ){
 	if( typeof date == "string" &&
@@ -126,6 +141,10 @@ Ethernity.prototype.initialize = function initialize( date ){
 	@end-method-documentation
 */
 Ethernity.prototype.persist = function persist( ){
+	if( this.trueTime ){
+		return this.trueTime;
+	}
+
 	var date = this.date.toDate( );
 
 	var offset = this.date.utcOffset( );
@@ -203,3 +222,7 @@ Ethernity.prototype.relativeTime = function relativeTime( ){
 Ethernity.prototype.trueTime = function trueTime( ){
 	return this.date.utc( ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
 };
+
+if( asea.server ){
+	module.exports = Ethernity;
+}
