@@ -51,6 +51,7 @@
 			"diatom": "diatom",
 			"harden": "harden",
 			"moment": "moment",
+			"raze": "raze",
 			"U200b": "u200b"
 		}
 	@end-include
@@ -60,6 +61,7 @@ if( typeof window == "undefined" ){
 	var diatom = require( "diatom" );
 	var harden = require( "harden" );
 	var moment = require( "moment" );
+	var raze = require( "raze" );
 	var U200b = require( "u200b" );
 }
 
@@ -79,6 +81,12 @@ if( typeof window != "undefined" &&
 	!( "moment" in window ) )
 {
 	throw new Error( "moment is not defined" );
+}
+
+if( typeof window != "undefined" &&
+	!( "raze" in window ) )
+{
+	throw new Error( "raze is not defined" );
 }
 
 if( typeof window != "undefined" &&
