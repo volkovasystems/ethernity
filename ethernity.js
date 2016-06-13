@@ -129,7 +129,11 @@ Ethernity.prototype.initialize = function initialize( date ){
 		return this;
 
 	}else{
-		return Ethernity( new Date( ) );
+		this.date = moment( new Date( ) );
+
+		this.persist( );
+
+		return this;
 	}
 };
 
@@ -151,7 +155,7 @@ Ethernity.prototype.persist = function persist( ){
 	var polarity = offset / Math.abs( offset );
 
 	var trueTime = U200b( [
-		polarity.replace( /\d+/, "" ) || "0",
+		polarity.toString( ).replace( /\d+/, "" ) || "0",
 		date.getUTCFullYear( ),
 		( "0" + ( date.getUTCMonth( ) + 1 ) ).slice( -2 ),
 		( "0" + ( date.getUTCDate( ) ) ).slice( -2 ),
@@ -213,13 +217,13 @@ Ethernity.prototype.relativeTime = function relativeTime( ){
 
 /*:
 	@method-documentation:
-		True time is the time with no UTC offset applied.
+		Real time is the time with no UTC offset applied.
 
 		This will return the time in ISO8601
 			@code:YYYY-MM-DDTHH:mm.ss.SSS;
 	@end-method-documentation
 */
-Ethernity.prototype.trueTime = function trueTime( ){
+Ethernity.prototype.realTime = function trueTime( ){
 	return this.date.utc( ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
 };
 
