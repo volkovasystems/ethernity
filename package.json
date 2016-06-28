@@ -1,6 +1,6 @@
 {
   "name": "ethernity",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Persist time as true time.",
   "main": "ethernity.js",
   "scripts": {
@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/volkovasystems/ethernity#readme",
   "dependencies": {
-    "asea": "0.0.1",
-    "diatom": "0.0.6",
-    "harden": "^0.3.1",
+    "asea": "0.0.2",
+    "diatom": "0.0.10",
+    "harden": "^0.3.2",
     "moment": "^2.13.0",
-    "raze": "0.0.4",
-    "u200b": "0.0.7"
+    "raze": "0.0.5",
+    "u200b": "0.0.8"
   }
 }
