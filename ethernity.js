@@ -43,7 +43,7 @@
 	@end-module-configuration
 
 	@module-documentation:
-		Determines if you're on a server environment or a client environment.
+		Determines if you are on a server environment or a client environment.
 	@end-module-documentation
 
 	@include:
