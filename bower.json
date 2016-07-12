@@ -1,6 +1,6 @@
 {
   "name": "ethernity",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Persist time as true time.",
   "main": "ethernity.js",
   "authors": [
@@ -25,6 +25,6 @@
     "harden": "^0.3.2",
     "asea": "^0.0.2",
     "diatom": "^0.1.1",
-    "u200b": "^0.0.9"
+    "u200b": "^0.0.10"
   }
 }
