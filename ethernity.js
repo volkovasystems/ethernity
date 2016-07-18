@@ -1,6 +1,6 @@
 "use strict";
 
-/*:
+/*;
 	@module-license:
 		The MIT License (MIT)
 		@mit-license
@@ -175,7 +175,7 @@ Ethernity.prototype.persist = function persist( ){
 	return trueTime;
 };
 
-/*:
+/*;
 	@method-documentation:
 		Decompose true time to a moment object.
 	@end-method-documentation
@@ -212,7 +212,7 @@ Ethernity.prototype.parse = function parse( ){
 	return this;
 };
 
-/*:
+/*;
 	@method-documentation:
 		Relative time is the time applied with UTC offset.
 
@@ -226,7 +226,7 @@ Ethernity.prototype.relativeTime = function relativeTime( ){
 	return this.date.utcOffset( this.offset ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
 };
 
-/*:
+/*;
 	@method-documentation:
 		Real time is the time with no UTC offset applied.
 
