@@ -115,7 +115,7 @@ Ethernity.prototype.valueOf = function valueOf( ){
 Ethernity.prototype.initialize = function initialize( date ){
 	if( typeof date == "string" &&
 		date.length == 31 &&
-		/^\-*[\d\u200b]{30}$/.test( date ) )
+		( /^\-[\d\u200b]{30}|^[\d\u200b]{31}$/ ).test( date ) )
 	{
 		this.date = date;
 
