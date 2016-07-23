@@ -194,6 +194,8 @@ Ethernity.prototype.parse = function parse( ){
 
 	var polarity = parseInt( date[ 0 ] + 1 );
 
+	this.offset = polarity * parseInt( date[ 8 ] );
+
 	date = moment.utc( )
 		.year( parseInt( date[ 1 ] ) )
 		.month( parseInt( date[ 2 ] ) - 1 )
@@ -202,8 +204,6 @@ Ethernity.prototype.parse = function parse( ){
 		.minute( parseInt( date[ 5 ] ) )
 		.second( parseInt( date[ 6 ] ) )
 		.millisecond( parseInt( date[ 7 ] ) );
-
-	this.offset = polarity * parseInt( date[ 8 ] );
 
 	//: This will set the timezone of the Date object to the machine timezone.
 	this.date = date;

@@ -1,6 +1,6 @@
 {
   "name": "ethernity",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Persist time as true time.",
   "main": "ethernity.js",
   "scripts": {
