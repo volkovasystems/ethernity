@@ -153,7 +153,7 @@ Ethernity.prototype.persist = function persist( ){
 
 	var date = this.date.toDate( );
 
-	var offset = this.date.utcOffset( );
+	var offset = this.offset || this.date.utcOffset( );
 	var polarity = offset / Math.abs( offset );
 
 	var trueTime = U200b( [
@@ -194,15 +194,16 @@ Ethernity.prototype.parse = function parse( ){
 
 	var polarity = parseInt( date[ 0 ] + 1 );
 
-	date = moment( )
+	date = moment.utc( )
 		.year( parseInt( date[ 1 ] ) )
 		.month( parseInt( date[ 2 ] ) - 1 )
 		.date( parseInt( date[ 3 ] ) )
 		.hour( parseInt( date[ 4 ] ) )
 		.minute( parseInt( date[ 5 ] ) )
 		.second( parseInt( date[ 6 ] ) )
-		.millisecond( parseInt( date[ 7 ] ) )
-		.utcOffset( parseInt( date[ 8 ] ) * polarity );
+		.millisecond( parseInt( date[ 7 ] ) );
+
+	this.offset = polarity * parseInt( date[ 8 ] );
 
 	//: This will set the timezone of the Date object to the machine timezone.
 	this.date = date;
@@ -223,7 +224,7 @@ Ethernity.prototype.parse = function parse( ){
 	@end-method-documentation
 */
 Ethernity.prototype.relativeTime = function relativeTime( ){
-	return this.date.utcOffset( this.offset ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
+	return this.date.utc( ).utcOffset( this.offset ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
 };
 
 /*;
