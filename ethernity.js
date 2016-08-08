@@ -121,22 +121,35 @@ Ethernity.prototype.initialize = function initialize( date ){
 
 		this.parse( );
 
-		return this;
+	}else if( typeof date == "string" &&
+		date )
+	{
+		try{
+			date = moment( date );
+
+			if( date.isValid( ) ){
+				this.initialize( date.toDate( ) );
+
+			}else{
+				throw new Error( "invalid format, " + arguments[ 0 ] );
+			}
+
+		}catch( error ){
+			throw new Error( "error encountered while parsing, " + error.message );
+		}
 
 	}else if( date instanceof Date ){
 		this.date = moment( date );
 
 		this.persist( );
 
-		return this;
-
 	}else{
 		this.date = moment( new Date( ) );
 
 		this.persist( );
-
-		return this;
 	}
+
+	return this;
 };
 
 /*
@@ -235,8 +248,47 @@ Ethernity.prototype.relativeTime = function relativeTime( ){
 			@code:YYYY-MM-DDTHH:mm.ss.SSS;
 	@end-method-documentation
 */
-Ethernity.prototype.realTime = function trueTime( ){
+Ethernity.prototype.realTime = function realTime( ){
 	return this.date.utc( ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
+};
+
+/*;
+	@method-documentation:
+		Returns a simple human readable representation of time in 12 hour format.
+
+		Time will be relative.
+	@end-method-documentation
+*/
+Ethernity.prototype.getTime = function getTime( ){
+	return this.date.utc( ).utcOffset( this.offset ).format( "hh:mm:ss A" );
+};
+
+/*;
+	@method-documentation:
+		Returns a simple human readable representation of date.
+
+		Date will be relative.
+	@end-method-documentation
+*/
+Ethernity.prototype.getDate = function getDate( ){
+	return this.date.utc( ).utcOffset( this.offset ).format( "MMMM DD, YYYY" );
+};
+
+/*;
+	@method-documentation:
+		Returns a simple human readable representation of time and date.
+
+		Time and date will be relative.
+	@end-method-documentation
+*/
+Ethernity.prototype.printTime = function printTime( separator ){
+	if( typeof separator != "string" ){
+		separator = " | ";
+	}
+
+	separator = separator || " | ";
+
+	return [ this.getDate( ), this.getTime( ) ].join( separator );
 };
 
 if( asea.server ){
