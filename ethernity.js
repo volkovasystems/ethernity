@@ -279,16 +279,42 @@ Ethernity.prototype.getDate = function getDate( ){
 		Returns a simple human readable representation of time and date.
 
 		Time and date will be relative.
+
+		Setting complete will append true time format.
 	@end-method-documentation
 */
-Ethernity.prototype.printTime = function printTime( separator ){
+Ethernity.prototype.printTime = function printTime( separator, complete ){
+	/*;
+		@meta-configuration:
+			{
+				"separator": "string",
+				"complete": "boolean"
+			}
+		@end-meta-configuration
+	*/
+
+	separator = raze( arguments )
+		.filter( function onEachParameter( parameter ){
+			return typeof parameter == "string";
+		} )[ 0 ];
+
+	complete = raze( arguments )
+		.filter( function onEachParameter( parameter ){
+			return typeof parameter == "boolean";
+		} )[ 0 ];
+
 	if( typeof separator != "string" ){
 		separator = " | ";
 	}
 
 	separator = separator || " | ";
 
-	return [ this.getDate( ), this.getTime( ) ].join( separator );
+	if( complete ){
+		return [ this.getDate( ), this.getTime( ), this.trueTime ].join( separator );
+
+	}else{
+		return [ this.getDate( ), this.getTime( ) ].join( separator );
+	}
 };
 
 if( asea.server ){
