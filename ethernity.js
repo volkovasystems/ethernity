@@ -43,15 +43,16 @@
 	@end-module-configuration
 
 	@module-documentation:
-		Determines if you are on a server environment or a client environment.
+
 	@end-module-documentation
 
 	@include:
 		{
+			"asea": "asea",
 			"diatom": "diatom",
 			"harden": "harden",
 			"moment": "moment",
-			"raze": "raze",
+			"optfor": "optfor",
 			"U200b": "u200b"
 		}
 	@end-include
@@ -62,7 +63,7 @@ if( typeof window == "undefined" ){
 	var diatom = require( "diatom" );
 	var harden = require( "harden" );
 	var moment = require( "moment" );
-	var raze = require( "raze" );
+	var optfor = require( "optfor" );
 	var U200b = require( "u200b" );
 }
 
@@ -91,9 +92,9 @@ if( asea.client &&
 }
 
 if( asea.client &&
-	!( "raze" in window ) )
+	!( "optfor" in window ) )
 {
-	throw new Error( "raze is not defined" );
+	throw new Error( "optfor is not defined" );
 }
 
 if( asea.client &&
@@ -104,6 +105,10 @@ if( asea.client &&
 
 var Ethernity = diatom( "Ethernity" );
 
+harden( "now", function now( ){
+	return Ethernity( ).compact( );
+}, Ethernity );
+
 Ethernity.prototype.toString = function toString( ){
 	return this.trueTime;
 };
@@ -113,7 +118,18 @@ Ethernity.prototype.valueOf = function valueOf( ){
 };
 
 Ethernity.prototype.initialize = function initialize( date ){
-	if( typeof date == "string" &&
+	if( Array.isArray( date ) &&
+		typeof date[ 0 ] == NUMBER &&
+		typeof date[ 1 ] == NUMBER &&
+		date[ 0 ].toString( ).length == 17 )
+	{
+		this.date = moment( date[ 0 ], "YYYYMMDDHHmmssSSS" );
+
+		this.offset = date[ 1 ];
+
+		this.persist( );
+
+	}else if( typeof date == STRING &&
 		date.length == 31 &&
 		( /^\-[\d\u200b]{30}|^[\d\u200b]{31}$/ ).test( date ) )
 	{
@@ -121,7 +137,7 @@ Ethernity.prototype.initialize = function initialize( date ){
 
 		this.parse( );
 
-	}else if( typeof date == "string" &&
+	}else if( typeof date == STRING &&
 		date )
 	{
 		try{
@@ -195,7 +211,7 @@ Ethernity.prototype.persist = function persist( ){
 */
 Ethernity.prototype.parse = function parse( ){
 	var date = this.date;
-	if( typeof this.date == "string" ){
+	if( typeof this.date == STRING ){
 		date = U200b( this.date ).separate( );
 
 	}else if( this.trueTime ){
@@ -293,21 +309,14 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 		@end-meta-configuration
 	*/
 
-	separator = raze( arguments )
-		.filter( function onEachParameter( parameter ){
-			return typeof parameter == "string";
-		} )[ 0 ];
+	separator = optfor( arguments, STRING );
 
-	complete = raze( arguments )
-		.filter( function onEachParameter( parameter ){
-			return typeof parameter == "boolean";
-		} )[ 0 ];
-
-	if( typeof separator != "string" ){
+	separator = separator || " | ";
+	if( typeof separator != STRING ){
 		separator = " | ";
 	}
 
-	separator = separator || " | ";
+	complete = optfor( arguments, BOOLEAN );
 
 	if( complete ){
 		return [ this.getDate( ), this.getTime( ), this.trueTime ].join( separator );
@@ -315,6 +324,18 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 	}else{
 		return [ this.getDate( ), this.getTime( ) ].join( separator );
 	}
+};
+
+/*;
+	@method-documentation:
+		Returns a numerical representation of true time.
+	@end-method-documentation
+*/
+Ethernity.prototype.compact = function compact( ){
+	return [
+		parseInt( this.date.utc( ).format( "YYYYMMDDHHmmssSSS" ) ),
+		this.offset
+	];
 };
 
 if( asea.server ){
