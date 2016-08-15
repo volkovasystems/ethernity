@@ -123,9 +123,10 @@ Ethernity.prototype.initialize = function initialize( date ){
 		typeof date[ 1 ] == NUMBER &&
 		date[ 0 ].toString( ).length == 17 )
 	{
-		this.date = moment( date[ 0 ], "YYYYMMDDHHmmssSSS" );
-
 		this.offset = date[ 1 ];
+
+		this.date = moment.utc( date[ 0 ], "YYYYMMDDHHmmssSSS" )
+			.utcOffset( this.offset );
 
 		this.persist( );
 
