@@ -1,6 +1,6 @@
 {
   "name": "ethernity",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Persist time as true time.",
   "main": "ethernity.js",
   "scripts": {
@@ -11,11 +11,11 @@
     "url": "git+https://github.com/volkovasystems/ethernity.git"
   },
   "keywords": [
-	"time",
-	"date",
+    "time",
+    "date",
     "true-time",
     "eternity",
-	"ethernity"
+    "ethernity"
   ],
   "author": "Richeve S. Bebedor <richeve.bebedor@gmail.com>",
   "license": "MIT",
@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/volkovasystems/ethernity#readme",
   "dependencies": {
-    "asea": "0.0.3",
-    "diatom": "^0.2.3",
-    "harden": "^0.3.2",
+    "asea": "^0.1.2",
+    "diatom": "^0.2.4",
+    "harden": "^0.3.5",
     "moment": "^2.14.1",
-    "optfor": "^0.1.0",
-    "u200b": "^0.1.2"
+    "optfor": "^0.2.0",
+    "u200b": "^0.1.3"
   }
 }
