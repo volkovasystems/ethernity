@@ -125,7 +125,8 @@ Ethernity.prototype.initialize = function initialize( date ){
 	{
 		this.offset = date[ 1 ];
 
-		this.date = moment.utc( date[ 0 ], "YYYYMMDDHHmmssSSS" )
+		this.date = moment.utc( date[ 0 ], "YYYYMMDDHHmmss" )
+			.millisecond( 0 )
 			.utcOffset( this.offset );
 
 		this.persist( );
@@ -330,13 +331,17 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 /*;
 	@method-documentation:
 		Returns a numerical representation of true time.
+
+		Millisecond will not be included.
 	@end-method-documentation
 */
 Ethernity.prototype.compact = function compact( ){
 	return [
-		parseInt( this.date.utc( ).format( "YYYYMMDDHHmmssSSS" ) ),
+		this.date.utc( ).format( "YYYYMMDDHHmmss" ),
 		this.offset
-	];
+	].map( function onEachToken( token ){
+		return parseInt( token.toString( ) );
+	} );
 };
 
 if( asea.server ){
