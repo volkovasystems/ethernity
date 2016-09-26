@@ -1,6 +1,6 @@
 {
   "name": "ethernity",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Persist time as true time.",
   "main": "ethernity.js",
   "authors": [
@@ -28,6 +28,6 @@
     "harden": "^0.3.5",
     "moment": "^2.15.1",
     "optfor": "^0.2.0",
-    "u200b": "^0.2.2"
+    "u200b": "^0.2.3"
   }
 }
