@@ -43,16 +43,21 @@
 	@end-module-configuration
 
 	@module-documentation:
+		Persist time as true time.
 
+		This will discard milliseconds value.
 	@end-module-documentation
 
 	@include:
 		{
 			"asea": "asea",
 			"diatom": "diatom",
+			"doubt": "doubt",
+			"falzy": "falzy",
 			"harden": "harden",
 			"moment": "moment",
 			"optfor": "optfor",
+			"truu": "truu",
 			"U200b": "u200b"
 		}
 	@end-include
@@ -61,9 +66,12 @@
 if( typeof window == "undefined" ){
 	var asea = require( "asea" );
 	var diatom = require( "diatom" );
+	var doubt = require( "doubt" );
+	var falzy = require( "falzy" );
 	var harden = require( "harden" );
 	var moment = require( "moment" );
 	var optfor = require( "optfor" );
+	var truly = require( "truly" );
 	var U200b = require( "u200b" );
 }
 
@@ -77,6 +85,18 @@ if( asea.client &&
 	!( "diatom" in window ) )
 {
 	throw new Error( "diatom is not defined" );
+}
+
+if( asea.client &&
+	!( "doubt" in window ) )
+{
+	throw new Error( "doubt is not defined" );
+}
+
+if( asea.client &&
+	!( "falzy" in window ) )
+{
+	throw new Error( "falzy is not defined" );
 }
 
 if( asea.client &&
@@ -95,6 +115,12 @@ if( asea.client &&
 	!( "optfor" in window ) )
 {
 	throw new Error( "optfor is not defined" );
+}
+
+if( asea.client &&
+	!( "truly" in window ) )
+{
+	throw new Error( "truly is not defined" );
 }
 
 if( asea.client &&
@@ -118,30 +144,40 @@ Ethernity.prototype.valueOf = function valueOf( ){
 };
 
 Ethernity.prototype.initialize = function initialize( date ){
-	if( Array.isArray( date ) &&
+	/*;
+		@meta-configuration:
+			{
+				"date:required": [
+					[ "number", "number" ],
+					"string",
+					Date
+				]
+			}
+		@end-meta-configuration
+	*/
+
+	if( doubt( date ).ARRAY &&
 		typeof date[ 0 ] == NUMBER &&
 		typeof date[ 1 ] == NUMBER &&
 		date[ 0 ].toString( ).length == 17 )
 	{
 		this.offset = date[ 1 ];
 
-		this.date = moment.utc( date[ 0 ], "YYYYMMDDHHmmss" )
+		this.date = moment.utc( date[ 0 ], Ethernity.COMPACT_FORMAT )
 			.millisecond( 0 )
 			.utcOffset( this.offset );
 
 		this.persist( );
 
 	}else if( typeof date == STRING &&
-		date.length == 31 &&
-		( /^\-[\d\u200b]{30}|^[\d\u200b]{31}$/ ).test( date ) )
+		date.length == 27 &&
+		Ethernity.TRUE_TIME_PATTERN.test( date ) )
 	{
 		this.date = date;
 
 		this.parse( );
 
-	}else if( typeof date == STRING &&
-		date )
-	{
+	}else if( truly( date ) && typeof date == STRING ){
 		try{
 			date = moment( date );
 
@@ -178,24 +214,33 @@ Ethernity.prototype.initialize = function initialize( date ){
 	@end-method-documentation
 */
 Ethernity.prototype.persist = function persist( ){
-	if( this.trueTime ){
+	if( truly( this.trueTime ) ){
 		return this.trueTime;
 	}
 
-	var date = this.date.toDate( );
+	let date = this.date.toDate( );
 
-	var offset = this.offset || this.date.utcOffset( );
-	var polarity = offset / Math.abs( offset );
+	let offset = this.offset || this.date.utcOffset( );
+	try{
+		offset = parseInt( offset );
 
-	var trueTime = U200b( [
-		polarity.toString( ).replace( /\d+/, "" ) || "0",
+	}catch( error ){
+		throw new Error( "invalid timezone offset, " + error.message );
+	}
+
+	let polarity = offset / Math.abs( offset );
+
+	let trueTime = U200b( [
+		polarity.toString( ).replace( Ethernity.NUMERIC_PATTERN, "" ) || "0",
+
 		date.getUTCFullYear( ),
+
 		( "0" + ( date.getUTCMonth( ) + 1 ) ).slice( -2 ),
 		( "0" + ( date.getUTCDate( ) ) ).slice( -2 ),
 		( "0" + ( date.getUTCHours( ) ) ).slice( -2 ),
 		( "0" + ( date.getUTCMinutes( ) ) ).slice( -2 ),
 		( "0" + ( date.getUTCSeconds( ) ) ).slice( -2 ),
-		( "00" + ( date.getUTCMilliseconds( ) ) ).slice( -3 ),
+
 		( "000" + Math.abs( offset ) ).slice( -5 )
 	] ).join( );
 
@@ -212,29 +257,34 @@ Ethernity.prototype.persist = function persist( ){
 	@end-method-documentation
 */
 Ethernity.prototype.parse = function parse( ){
-	var date = this.date;
+	let date = this.date;
 	if( typeof this.date == STRING ){
 		date = U200b( this.date ).separate( );
 
-	}else if( this.trueTime ){
+	}else if( truly( this.trueTime ) ){
 		date = U200b( this.trueTime ).separate( );
 
 	}else{
 		throw new Error( "date not specified" );
 	}
 
-	var polarity = parseInt( date[ 0 ] + 1 );
+	try{
+		let polarity = parseInt( date[ 0 ] + 1 );
 
-	this.offset = polarity * parseInt( date[ 8 ] );
+		this.offset = polarity * parseInt( date[ 7 ] );
 
-	date = moment.utc( )
-		.year( parseInt( date[ 1 ] ) )
-		.month( parseInt( date[ 2 ] ) - 1 )
-		.date( parseInt( date[ 3 ] ) )
-		.hour( parseInt( date[ 4 ] ) )
-		.minute( parseInt( date[ 5 ] ) )
-		.second( parseInt( date[ 6 ] ) )
-		.millisecond( parseInt( date[ 7 ] ) );
+		date = moment.utc( )
+			.year( parseInt( date[ 1 ] ) )
+			.month( parseInt( date[ 2 ] ) - 1 )
+			.date( parseInt( date[ 3 ] ) )
+			.hour( parseInt( date[ 4 ] ) )
+			.minute( parseInt( date[ 5 ] ) )
+			.second( parseInt( date[ 6 ] ) )
+			.millisecond( 0 );
+
+	}catch( error ){
+		throw new Error( "error parsing true time, " + error.message );
+	}
 
 	//: This will set the timezone of the Date object to the machine timezone.
 	this.date = date;
@@ -248,26 +298,38 @@ Ethernity.prototype.parse = function parse( ){
 	@method-documentation:
 		Relative time is the time applied with UTC offset.
 
-		This will return the time in ISO8601 format.
-			@code:YYYY-MM-DDTHH:mm.ss.SSS;
+		This will return the time in ISO8601 format format with milliseconds dropped.
+			@code:YYYY-MM-DDTHH:mm.ss;
 
 		Do not use this to reference true time.
 	@end-method-documentation
 */
 Ethernity.prototype.relativeTime = function relativeTime( ){
-	return this.date.utc( ).utcOffset( this.offset ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
+	if( falzy( this.date ) ){
+		throw new Error( "internal date empty" );
+	}
+
+	if( falzy( this.offset ) ){
+		throw new Error( "internal timezone offset empty" );
+	}
+
+	return this.date.utc( ).utcOffset( this.offset ).format( Ethernity.ISO8601_FORMAT );
 };
 
 /*;
 	@method-documentation:
 		Real time is the time with no UTC offset applied.
 
-		This will return the time in ISO8601
-			@code:YYYY-MM-DDTHH:mm.ss.SSS;
+		This will return the time in ISO8601 format with milliseconds dropped.
+			@code:YYYY-MM-DDTHH:mm.ss;
 	@end-method-documentation
 */
 Ethernity.prototype.realTime = function realTime( ){
-	return this.date.utc( ).format( "YYYY-MM-DDTHH:mm:ss.SSS" );
+	if( falzy( this.date ) ){
+		throw new Error( "internal date empty" );
+	}
+
+	return this.date.utc( ).format( Ethernity.ISO8601_FORMAT );
 };
 
 /*;
@@ -278,7 +340,15 @@ Ethernity.prototype.realTime = function realTime( ){
 	@end-method-documentation
 */
 Ethernity.prototype.getTime = function getTime( ){
-	return this.date.utc( ).utcOffset( this.offset ).format( "hh:mm:ss A" );
+	if( falzy( this.date ) ){
+		throw new Error( "internal date empty" );
+	}
+
+	if( falzy( this.offset ) ){
+		throw new Error( "internal timezone offset empty" );
+	}
+
+	return this.date.utc( ).utcOffset( this.offset ).format( Ethernity.SIMPLE_TIME_FORMAT );
 };
 
 /*;
@@ -289,7 +359,15 @@ Ethernity.prototype.getTime = function getTime( ){
 	@end-method-documentation
 */
 Ethernity.prototype.getDate = function getDate( ){
-	return this.date.utc( ).utcOffset( this.offset ).format( "MMMM DD, YYYY" );
+	if( falzy( this.date ) ){
+		throw new Error( "internal date empty" );
+	}
+
+	if( falzy( this.offset ) ){
+		throw new Error( "internal timezone offset empty" );
+	}
+
+	return this.date.utc( ).utcOffset( this.offset ).format( Ethernity.SIMPLE_DATE_FORMAT );
 };
 
 /*;
@@ -313,14 +391,14 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 
 	separator = optfor( arguments, STRING );
 
-	separator = separator || " | ";
+	separator = separator || Ethernity.DEFAULT_SEPARATOR;
 	if( typeof separator != STRING ){
-		separator = " | ";
+		separator = Ethernity.DEFAULT_SEPARATOR;
 	}
 
 	complete = optfor( arguments, BOOLEAN );
 
-	if( complete ){
+	if( complete === true ){
 		return [ this.getDate( ), this.getTime( ), this.trueTime ].join( separator );
 
 	}else{
@@ -331,18 +409,30 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 /*;
 	@method-documentation:
 		Returns a numerical representation of true time.
-
-		Millisecond will not be included.
 	@end-method-documentation
 */
 Ethernity.prototype.compact = function compact( ){
-	return [
-		this.date.utc( ).format( "YYYYMMDDHHmmss" ),
-		this.offset
-	].map( function onEachToken( token ){
-		return parseInt( token.toString( ) );
-	} );
+	let date = this.date.utc( ).format( Ethernity.COMPACT_FORMAT );
+
+	return [ date, this.offset ]
+		.map( function onEachToken( token ){
+			return parseInt( token.toString( ) );
+		} );
 };
+
+harden.bind( Ethernity )( "DEFAULT_SEPARATOR", " | " );
+
+harden.bind( Ethernity )( "COMPACT_FORMAT", "YYYYMMDDHHmmss" );
+
+harden.bind( Ethernity )( "ISO8601_FORMAT", "YYYY-MM-DDTHH:mm:ss" );
+
+harden.bind( Ethernity )( "SIMPLE_DATE_FORMAT", "MMMM DD, YYYY" );
+
+harden.bind( Ethernity )( "SIMPLE_TIME_FORMAT", "hh:mm:ss A" );
+
+harden.bind( Ethernity )( "TRUE_TIME_PATTERN", /^\-[\d\u200b]{26}|^[\d\u200b]{27}$/ );
+
+harden.bind( Ethernity )( "NUMERIC_PATTERN", /\d+/ );
 
 if( asea.server ){
 	module.exports = Ethernity;
