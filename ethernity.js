@@ -34,6 +34,9 @@
 			"file": "ethernity.js",
 			"module": "ethernity",
 			"author": "Richeve S. Bebedor",
+			"contributors": [
+				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
+			],
 			"eMail": "richeve.bebedor@gmail.com",
 			"repository": "https://github.com:volkovasystems/ethernity.git",
 			"test": "ethernity-test.js",
@@ -63,73 +66,19 @@
 	@end-include
 */
 
-if( typeof window == "undefined" ){
-	var asea = require( "asea" );
-	var diatom = require( "diatom" );
-	var doubt = require( "doubt" );
-	var falzy = require( "falzy" );
-	var harden = require( "harden" );
-	var moment = require( "moment" );
-	var optfor = require( "optfor" );
-	var truly = require( "truly" );
-	var U200b = require( "u200b" );
-}
+const asea = require( "asea" );
+const clazof = require( "clazof" );
+const diatom = require( "diatom" );
+const doubt = require( "doubt" );
+const falzy = require( "falzy" );
+const harden = require( "harden" );
+const moment = require( "moment" );
+const optfor = require( "optfor" );
+const protype = require( "protype" );
+const truly = require( "truly" );
+const U200b = require( "u200b" );
 
-if( typeof window != "undefined" &&
-	!( "asea" in window ) )
-{
-	throw new Error( "asea is not defined" );
-}
-
-if( asea.client &&
-	!( "diatom" in window ) )
-{
-	throw new Error( "diatom is not defined" );
-}
-
-if( asea.client &&
-	!( "doubt" in window ) )
-{
-	throw new Error( "doubt is not defined" );
-}
-
-if( asea.client &&
-	!( "falzy" in window ) )
-{
-	throw new Error( "falzy is not defined" );
-}
-
-if( asea.client &&
-	!( "harden" in window ) )
-{
-	throw new Error( "harden is not defined" );
-}
-
-if( asea.client &&
-	!( "moment" in window ) )
-{
-	throw new Error( "moment is not defined" );
-}
-
-if( asea.client &&
-	!( "optfor" in window ) )
-{
-	throw new Error( "optfor is not defined" );
-}
-
-if( asea.client &&
-	!( "truly" in window ) )
-{
-	throw new Error( "truly is not defined" );
-}
-
-if( asea.client &&
-	!( "U200b" in window ) )
-{
-	throw new Error( "U200b is not defined" );
-}
-
-var Ethernity = diatom( "Ethernity" );
+const Ethernity = diatom( "Ethernity" );
 
 harden( "now", function now( ){
 	return Ethernity( ).compact( );
@@ -157,8 +106,8 @@ Ethernity.prototype.initialize = function initialize( date ){
 	*/
 
 	if( doubt( date ).ARRAY &&
-		typeof date[ 0 ] == NUMBER &&
-		typeof date[ 1 ] == NUMBER &&
+		protype( date[ 0 ], NUMBER ) &&
+		protype( date[ 1 ], NUMBER ) &&
 		date[ 0 ].toString( ).length == 17 )
 	{
 		this.offset = date[ 1 ];
@@ -169,7 +118,7 @@ Ethernity.prototype.initialize = function initialize( date ){
 
 		this.persist( );
 
-	}else if( typeof date == STRING &&
+	}else if( protype( date, STRING ) &&
 		date.length == 27 &&
 		Ethernity.TRUE_TIME_PATTERN.test( date ) )
 	{
@@ -177,7 +126,7 @@ Ethernity.prototype.initialize = function initialize( date ){
 
 		this.parse( );
 
-	}else if( truly( date ) && typeof date == STRING ){
+	}else if( truly( date ) && protype( date, STRING ) ){
 		try{
 			date = moment( date );
 
@@ -192,7 +141,7 @@ Ethernity.prototype.initialize = function initialize( date ){
 			throw new Error( "error encountered while parsing, " + error.message );
 		}
 
-	}else if( date instanceof Date ){
+	}else if( clazof( date, Date ) ){
 		this.date = moment( date );
 
 		this.persist( );
@@ -258,7 +207,7 @@ Ethernity.prototype.persist = function persist( ){
 */
 Ethernity.prototype.parse = function parse( ){
 	let date = this.date;
-	if( typeof this.date == STRING ){
+	if( protype( this.date, STRING ) ){
 		date = U200b( this.date ).separate( );
 
 	}else if( truly( this.trueTime ) ){
@@ -392,7 +341,7 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 	separator = optfor( arguments, STRING );
 
 	separator = separator || Ethernity.DEFAULT_SEPARATOR;
-	if( typeof separator != STRING ){
+	if( !protype( separator, STRING ) ){
 		separator = Ethernity.DEFAULT_SEPARATOR;
 	}
 
@@ -434,6 +383,4 @@ harden.bind( Ethernity )( "TRUE_TIME_PATTERN", /^\-[\d\u200b]{26}|^[\d\u200b]{27
 
 harden.bind( Ethernity )( "NUMERIC_PATTERN", /\d+/ );
 
-if( asea.server ){
-	module.exports = Ethernity;
-}
+module.exports = Ethernity;
