@@ -6,7 +6,7 @@
   "support": "ethernity.support.js",
   "deploy": "ethernity.deploy.js",
   "scripts": {
-    "build": "babel ethernity -o ethernity.support.js && webpack",
+    "build": "babel ethernity.js -o ethernity.support.js && webpack",
     "test": "mocha ethernity-test.js"
   },
   "repository": {
@@ -42,5 +42,13 @@
     "protype": "^0.7.0",
     "truly": "^0.5.0",
     "u200b": "^0.7.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-latest": "^6.16.0",
+    "source-map-loader": "^0.1.5",
+    "webpack": "^1.14.0"
   }
 }
