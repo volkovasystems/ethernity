@@ -62,6 +62,7 @@
 			"harden": "harden",
 			"moment": "moment",
 			"optfor": "optfor",
+			"raze": "raze",
 			"truly": "truly",
 			"U200b": "u200b"
 		}
@@ -78,6 +79,7 @@ const harden = require( "harden" );
 const moment = require( "moment" );
 const optfor = require( "optfor" );
 const protype = require( "protype" );
+const raze = require( "raze" );
 const truly = require( "truly" );
 const U200b = require( "u200b" );
 
@@ -388,12 +390,8 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 	@end-method-documentation
 */
 Ethernity.prototype.compact = function compact( ){
-	let date = this.date.utc( ).format( COMPACT_FORMAT );
-
-	return [ date, this.offset ]
-		.map( function onEachToken( token ){
-			return parseInt( token.toString( ) );
-		} );
+	return [ this.date.utc( ).format( COMPACT_FORMAT ), this.offset ]
+		.map( function onEachToken( token ){ return parseInt( token.toString( ) ); } );
 };
 
 

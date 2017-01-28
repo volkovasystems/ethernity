@@ -10,6 +10,7 @@ harden \
 moment \
 optfor \
 protype \
+raze \
 truly \
 u200b \
 --save && \
@@ -32,6 +33,7 @@ harden \
 moment \
 optfor \
 protype \
+raze \
 truly \
 u200b \
 --save
