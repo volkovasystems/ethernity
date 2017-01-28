@@ -53,23 +53,26 @@
 
 	@include:
 		{
-			"asea": "asea",
+			"clazof": "clazof",
+			"depher": "depher",
 			"diatom": "diatom",
 			"doubt": "doubt",
+			"falze": "falze",
 			"falzy": "falzy",
 			"harden": "harden",
 			"moment": "moment",
 			"optfor": "optfor",
-			"truu": "truu",
+			"truly": "truly",
 			"U200b": "u200b"
 		}
 	@end-include
 */
 
-const asea = require( "asea" );
 const clazof = require( "clazof" );
+const depher = require( "depher" );
 const diatom = require( "diatom" );
 const doubt = require( "doubt" );
+const falze = require( "falze" );
 const falzy = require( "falzy" );
 const harden = require( "harden" );
 const moment = require( "moment" );
@@ -77,6 +80,14 @@ const optfor = require( "optfor" );
 const protype = require( "protype" );
 const truly = require( "truly" );
 const U200b = require( "u200b" );
+
+const COMPACT_FORMAT = "YYYYMMDDHHmmss";
+const DEFAULT_SEPARATOR = " | ";
+const ISO8601_FORMAT = "YYYY-MM-DDTHH:mm:ss";
+const NUMERIC_PATTERN = /\d+/;
+const SIMPLE_DATE_FORMAT = "MMMM DD, YYYY";
+const SIMPLE_TIME_FORMAT = "hh:mm:ss A";
+const TRUE_TIME_PATTERN = /^\-[\d\u200b]{26}|^[\d\u200b]{27}$/;
 
 const Ethernity = diatom( "Ethernity" );
 
@@ -105,23 +116,20 @@ Ethernity.prototype.initialize = function initialize( date ){
 		@end-meta-configuration
 	*/
 
-	if( doubt( date ).ARRAY &&
+	if( doubt( date, ARRAY ) &&
 		protype( date[ 0 ], NUMBER ) &&
 		protype( date[ 1 ], NUMBER ) &&
 		date[ 0 ].toString( ).length == 17 )
 	{
 		this.offset = date[ 1 ];
 
-		this.date = moment.utc( date[ 0 ], Ethernity.COMPACT_FORMAT )
+		this.date = moment.utc( date[ 0 ], COMPACT_FORMAT )
 			.millisecond( 0 )
 			.utcOffset( this.offset );
 
 		this.persist( );
 
-	}else if( protype( date, STRING ) &&
-		date.length == 27 &&
-		Ethernity.TRUE_TIME_PATTERN.test( date ) )
-	{
+	}else if( protype( date, STRING ) && date.length == 27 && TRUE_TIME_PATTERN.test( date ) ){
 		this.date = date;
 
 		this.parse( );
@@ -134,11 +142,11 @@ Ethernity.prototype.initialize = function initialize( date ){
 				this.initialize( date.toDate( ) );
 
 			}else{
-				throw new Error( "invalid format, " + arguments[ 0 ] );
+				throw new Error( `invalid date format, ${ arguments[ 0 ] }` );
 			}
 
 		}catch( error ){
-			throw new Error( "error encountered while parsing, " + error.message );
+			throw new Error( `error encountered while parsing date, ${ error }` );
 		}
 
 	}else if( clazof( date, Date ) ){
@@ -174,22 +182,37 @@ Ethernity.prototype.persist = function persist( ){
 		offset = parseInt( offset );
 
 	}catch( error ){
-		throw new Error( "invalid timezone offset, " + error.message );
+		throw new Error( `invalid timezone offset, ${ error }` );
 	}
 
-	let polarity = offset / Math.abs( offset );
+	let polarity = 0;
+	if( offset != 0 ){
+		polarity = offset / Math.abs( offset );
+	}
 
 	let trueTime = U200b( [
-		polarity.toString( ).replace( Ethernity.NUMERIC_PATTERN, "" ) || "0",
+		//: positive / negative offset
+		polarity.toString( ).replace( NUMERIC_PATTERN, "" ) || "0",
 
+		//: year
 		date.getUTCFullYear( ),
 
+		//: month
 		( "0" + ( date.getUTCMonth( ) + 1 ) ).slice( -2 ),
+
+		//: day
 		( "0" + ( date.getUTCDate( ) ) ).slice( -2 ),
+
+		//: hour
 		( "0" + ( date.getUTCHours( ) ) ).slice( -2 ),
+
+		//: minute
 		( "0" + ( date.getUTCMinutes( ) ) ).slice( -2 ),
+
+		//: second
 		( "0" + ( date.getUTCSeconds( ) ) ).slice( -2 ),
 
+		//: offset
 		( "000" + Math.abs( offset ) ).slice( -5 )
 	] ).join( );
 
@@ -207,6 +230,7 @@ Ethernity.prototype.persist = function persist( ){
 */
 Ethernity.prototype.parse = function parse( ){
 	let date = this.date;
+
 	if( protype( this.date, STRING ) ){
 		date = U200b( this.date ).separate( );
 
@@ -232,7 +256,7 @@ Ethernity.prototype.parse = function parse( ){
 			.millisecond( 0 );
 
 	}catch( error ){
-		throw new Error( "error parsing true time, " + error.message );
+		throw new Error( `error parsing true time, ${ error }` );
 	}
 
 	//: This will set the timezone of the Date object to the machine timezone.
@@ -254,7 +278,7 @@ Ethernity.prototype.parse = function parse( ){
 	@end-method-documentation
 */
 Ethernity.prototype.relativeTime = function relativeTime( ){
-	if( falzy( this.date ) ){
+	if( falze( this.date ) ){
 		throw new Error( "internal date empty" );
 	}
 
@@ -262,7 +286,7 @@ Ethernity.prototype.relativeTime = function relativeTime( ){
 		throw new Error( "internal timezone offset empty" );
 	}
 
-	return this.date.utc( ).utcOffset( this.offset ).format( Ethernity.ISO8601_FORMAT );
+	return this.date.utc( ).utcOffset( this.offset ).format( ISO8601_FORMAT );
 };
 
 /*;
@@ -270,15 +294,16 @@ Ethernity.prototype.relativeTime = function relativeTime( ){
 		Real time is the time with no UTC offset applied.
 
 		This will return the time in ISO8601 format with milliseconds dropped.
-			@code:YYYY-MM-DDTHH:mm.ss;
+
+		`YYYY-MM-DDTHH:mm.ss`
 	@end-method-documentation
 */
 Ethernity.prototype.realTime = function realTime( ){
-	if( falzy( this.date ) ){
+	if( falze( this.date ) ){
 		throw new Error( "internal date empty" );
 	}
 
-	return this.date.utc( ).format( Ethernity.ISO8601_FORMAT );
+	return this.date.utc( ).format( ISO8601_FORMAT );
 };
 
 /*;
@@ -289,7 +314,7 @@ Ethernity.prototype.realTime = function realTime( ){
 	@end-method-documentation
 */
 Ethernity.prototype.getTime = function getTime( ){
-	if( falzy( this.date ) ){
+	if( falze( this.date ) ){
 		throw new Error( "internal date empty" );
 	}
 
@@ -297,7 +322,7 @@ Ethernity.prototype.getTime = function getTime( ){
 		throw new Error( "internal timezone offset empty" );
 	}
 
-	return this.date.utc( ).utcOffset( this.offset ).format( Ethernity.SIMPLE_TIME_FORMAT );
+	return this.date.utc( ).utcOffset( this.offset ).format( SIMPLE_TIME_FORMAT );
 };
 
 /*;
@@ -316,7 +341,7 @@ Ethernity.prototype.getDate = function getDate( ){
 		throw new Error( "internal timezone offset empty" );
 	}
 
-	return this.date.utc( ).utcOffset( this.offset ).format( Ethernity.SIMPLE_DATE_FORMAT );
+	return this.date.utc( ).utcOffset( this.offset ).format( SIMPLE_DATE_FORMAT );
 };
 
 /*;
@@ -338,14 +363,16 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 		@end-meta-configuration
 	*/
 
-	separator = optfor( arguments, STRING );
+	let parameter = raze( arguments );
 
-	separator = separator || Ethernity.DEFAULT_SEPARATOR;
+	separator = optfor( parameter, STRING );
+
+	separator = separator || DEFAULT_SEPARATOR;
 	if( !protype( separator, STRING ) ){
-		separator = Ethernity.DEFAULT_SEPARATOR;
+		separator = DEFAULT_SEPARATOR;
 	}
 
-	complete = optfor( arguments, BOOLEAN );
+	complete = depher( arguments, BOOLEAN, false );
 
 	if( complete === true ){
 		return [ this.getDate( ), this.getTime( ), this.trueTime ].join( separator );
@@ -361,7 +388,7 @@ Ethernity.prototype.printTime = function printTime( separator, complete ){
 	@end-method-documentation
 */
 Ethernity.prototype.compact = function compact( ){
-	let date = this.date.utc( ).format( Ethernity.COMPACT_FORMAT );
+	let date = this.date.utc( ).format( COMPACT_FORMAT );
 
 	return [ date, this.offset ]
 		.map( function onEachToken( token ){
@@ -369,18 +396,6 @@ Ethernity.prototype.compact = function compact( ){
 		} );
 };
 
-harden.bind( Ethernity )( "DEFAULT_SEPARATOR", " | " );
 
-harden.bind( Ethernity )( "COMPACT_FORMAT", "YYYYMMDDHHmmss" );
-
-harden.bind( Ethernity )( "ISO8601_FORMAT", "YYYY-MM-DDTHH:mm:ss" );
-
-harden.bind( Ethernity )( "SIMPLE_DATE_FORMAT", "MMMM DD, YYYY" );
-
-harden.bind( Ethernity )( "SIMPLE_TIME_FORMAT", "hh:mm:ss A" );
-
-harden.bind( Ethernity )( "TRUE_TIME_PATTERN", /^\-[\d\u200b]{26}|^[\d\u200b]{27}$/ );
-
-harden.bind( Ethernity )( "NUMERIC_PATTERN", /\d+/ );
 
 module.exports = Ethernity;
