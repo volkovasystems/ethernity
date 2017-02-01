@@ -121,7 +121,7 @@ Ethernity.prototype.initialize = function initialize( date ){
 	if( doubt( date, ARRAY ) &&
 		protype( date[ 0 ], NUMBER ) &&
 		protype( date[ 1 ], NUMBER ) &&
-		date[ 0 ].toString( ).length == 17 )
+		date[ 0 ].toString( ).length == 14 )
 	{
 		this.offset = date[ 1 ];
 
