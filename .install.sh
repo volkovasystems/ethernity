@@ -36,4 +36,5 @@ protype \
 raze \
 truly \
 u200b \
---save
+--save \
+--force-latest
