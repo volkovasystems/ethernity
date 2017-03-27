@@ -11,6 +11,7 @@ moment \
 optfor \
 protype \
 raze \
+stringe \
 truly \
 u200b \
 --save && \
@@ -34,6 +35,7 @@ moment \
 optfor \
 protype \
 raze \
+stringe \
 truly \
 u200b \
 --save \
