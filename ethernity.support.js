@@ -63,6 +63,7 @@
               			"moment": "moment",
               			"optfor": "optfor",
               			"raze": "raze",
+              			"stringe": "stringe",
               			"truly": "truly",
               			"U200b": "u200b"
               		}
@@ -80,6 +81,7 @@ var moment = require("moment");
 var optfor = require("optfor");
 var protype = require("protype");
 var raze = require("raze");
+var stringe = require("stringe");
 var truly = require("truly");
 var U200b = require("u200b");
 
@@ -121,7 +123,7 @@ Ethernity.prototype.initialize = function initialize(date) {
 	if (doubt(date, ARRAY) &&
 	protype(date[0], NUMBER) &&
 	protype(date[1], NUMBER) &&
-	date[0].toString().length == 14)
+	stringe(date[0]).length == 14)
 	{
 		this.offset = date[1];
 
@@ -194,7 +196,7 @@ Ethernity.prototype.persist = function persist() {
 
 	var trueTime = U200b([
 	//: positive / negative offset
-	polarity.toString().replace(NUMERIC_PATTERN, "") || "0",
+	stringe(polarity).replace(NUMERIC_PATTERN, "") || "0",
 
 	//: year
 	date.getUTCFullYear(),
@@ -391,7 +393,7 @@ Ethernity.prototype.printTime = function printTime(separator, complete) {
    */
 Ethernity.prototype.compact = function compact() {
 	return [this.date.utc().format(COMPACT_FORMAT), this.offset].
-	map(function onEachToken(token) {return parseInt(token.toString());});
+	map(function onEachToken(token) {return parseInt(stringe(token));});
 };
 
 
