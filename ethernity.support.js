@@ -150,7 +150,7 @@ Ethernity.prototype.initialize = function initialize(date) {
 			}
 
 		} catch (error) {
-			throw new Error("error encountered while parsing date, " + error);
+			throw new Error("error encountered while parsing date, " + error.stack);
 		}
 
 	} else if (clazof(date, Date)) {
@@ -186,7 +186,7 @@ Ethernity.prototype.persist = function persist() {
 		offset = parseInt(offset);
 
 	} catch (error) {
-		throw new Error("invalid timezone offset, " + error);
+		throw new Error("invalid timezone offset, " + error.stack);
 	}
 
 	var polarity = 0;
@@ -260,7 +260,7 @@ Ethernity.prototype.parse = function parse() {
 		millisecond(0);
 
 	} catch (error) {
-		throw new Error("error parsing true time, " + error);
+		throw new Error("error parsing true time, " + error.stack);
 	}
 
 	//: This will set the timezone of the Date object to the machine timezone.
