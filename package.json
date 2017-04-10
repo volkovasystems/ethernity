@@ -1,6 +1,6 @@
 {
   "name": "ethernity",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Persist time as true time.",
   "main": "ethernity.js",
   "support": "ethernity.support.js",
@@ -32,27 +32,27 @@
   "homepage": "https://github.com/volkovasystems/ethernity#readme",
   "dependencies": {
     "babel-runtime": "^6.23.0",
-    "clazof": "^0.19.0",
-    "depher": "^0.23.0",
-    "diatom": "^0.18.0",
+    "clazof": "^0.20.0",
+    "depher": "^0.25.0",
+    "diatom": "^0.19.0",
     "doubt": "^0.24.0",
     "falze": "^0.20.0",
     "falzy": "^0.17.0",
     "harden": "^0.21.0",
     "moment": "^2.18.1",
-    "optfor": "^0.19.0",
+    "optfor": "^0.20.0",
     "protype": "^0.21.0",
     "raze": "^0.25.0",
     "stringe": "^0.2.0",
     "truly": "^0.17.0",
-    "u200b": "^0.19.0"
+    "u200b": "^0.20.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-core": "^6.24.0",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-latest": "^6.24.0",
-    "source-map-loader": "^0.2.0",
-    "webpack": "^2.3.2"
+    "babel-preset-latest": "^6.24.1",
+    "source-map-loader": "^0.2.1",
+    "webpack": "^2.3.3"
   }
 }
