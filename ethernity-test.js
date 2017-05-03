@@ -1,33 +1,28 @@
 "use strict";
 
+const assert = require( "assert" );
 const Ethernity = require( "./ethernity.js" );
 
 let sample1 = new Date( "8/15/2016 12:47:45 PM" );
 
-console.log( Ethernity( sample1 ).printTime( ) );
+assert.equal( Ethernity( sample1 ).printTime( ), "August 15, 2016 | 12:47:45 PM" );
 
-console.log( Ethernity( sample1 ).getTime( ) );
+assert.equal( Ethernity( sample1 ).getTime( ), "12:47:45 PM" );
 
-console.log( Ethernity( sample1 ).getDate( ) );
+assert.equal( Ethernity( sample1 ).getDate( ), "August 15, 2016" );
 
-console.log( Ethernity( sample1 ).realTime( ) );
+assert.equal( Ethernity( sample1 ).realTime( ), "2016-08-15T04:47:45" );
 
-console.log( Ethernity( sample1 ).relativeTime( ) );
+assert.equal( Ethernity( sample1 ).relativeTime( ), "2016-08-15T12:47:45" );
 
 let ethernity_time = Ethernity( sample1 ).trueTime;
-
-console.log( "True time", ethernity_time );
+assert.equal( ethernity_time, "0​2016​08​15​04​47​45​00480" );
 
 let compact1 = Ethernity( sample1 ).compact( );
-
-console.log( "Compact", compact1 );
+assert.deepEqual( compact1, [ 20160815044745, 480 ] );
 
 let comparison1 = Ethernity( ethernity_time ).parse( );
-
-console.log( "Comparison1", comparison1  );
-
 let comparison2 = Ethernity( compact1 ).parse( );
+assert.deepEqual( comparison1.trueTime, comparison2.trueTime );
 
-console.log( "Comparison2", comparison2 );
-
-console.log( comparison1.trueTime === comparison2.trueTime );
+console.log( "ok" );
