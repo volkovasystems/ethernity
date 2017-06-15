@@ -1,8 +1,46 @@
+<!DOCTYPE html>
 <html>
 	<head>
-		<script
-			type="application/javascript"
-			src="./ethernity.deploy.js">
-		</script>
+		<title>ethernity unit test</title>
+
+		<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.3.2.css">
+
+		<script type="application/javascript" src="https://code.jquery.com/qunit/qunit-2.3.2.js"></script>
+
+		<script type="application/javascript" src="./ethernity.deploy.js"></script>
 	</head>
+
+	<body>
+		<div id="qunit"></div>
+
+		<div id="qunit-fixture"></div>
+
+		<script type="application/javascript">
+			QUnit.test( "ethernity unit test", function( assert ) {
+
+				let sample1 = new Date( "8/15/2016 12:47:45 PM" );
+
+				assert.equal( ethernity( sample1 ).printTime( ), "August 15, 2016 | 12:47:45 PM", "should be equal" );
+
+				assert.equal( ethernity( sample1 ).getTime( ), "12:47:45 PM", "should be equal" );
+
+				assert.equal( ethernity( sample1 ).getDate( ), "August 15, 2016", "should be equal" );
+
+				assert.equal( ethernity( sample1 ).realTime( ), "2016-08-15T04:47:45", "should be equal" );
+
+				assert.equal( ethernity( sample1 ).relativeTime( ), "2016-08-15T12:47:45", "should be equal" );
+
+				let ethernity_time = ethernity( sample1 ).trueTime;
+				assert.equal( ethernity_time, "0​2016​08​15​04​47​45​00480", "should return 0​2016​08​15​04​47​45​00480" );
+
+				let compact1 = ethernity( sample1 ).compact( );
+				assert.deepEqual( compact1, [ 20160815044745, 480 ], "should be deeply equal" );
+
+				let comparison1 = ethernity( ethernity_time ).parse( );
+				let comparison2 = ethernity( compact1 ).parse( );
+				assert.deepEqual( comparison1.trueTime, comparison2.trueTime, "should be equal" );
+
+			} );
+		</script>
+	</body>
 </html>
