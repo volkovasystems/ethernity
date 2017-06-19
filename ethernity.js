@@ -34,11 +34,11 @@
 			"file": "ethernity.js",
 			"module": "ethernity",
 			"author": "Richeve S. Bebedor",
+			"eMail": "richeve.bebedor@gmail.com",
 			"contributors": [
 				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>",
 				"Vinse Vinalon <vinsevinalon@gmail.com>"
 			],
-			"eMail": "richeve.bebedor@gmail.com",
 			"repository": "https://github.com:volkovasystems/ethernity.git",
 			"test": "ethernity-test.js",
 			"global": true,
