@@ -80,7 +80,6 @@ var falzy = require("falzy");
 var harden = require("harden");
 var moment = require("moment");
 var optfor = require("optfor");
-var protype = require("protype");
 var raze = require("raze");
 var stringe = require("stringe");
 var truly = require("truly");
@@ -122,8 +121,8 @@ Ethernity.prototype.initialize = function initialize(date) {
                                                             */
 
 	if (doubt(date, ARRAY) &&
-	protype(date[0], NUMBER) &&
-	protype(date[1], NUMBER) &&
+	typeof date[0] == "number" &&
+	typeof date[1] == "number" &&
 	stringe(date[0]).length == 14)
 	{
 		this.offset = date[1];
@@ -134,12 +133,12 @@ Ethernity.prototype.initialize = function initialize(date) {
 
 		this.persist();
 
-	} else if (protype(date, STRING) && date.length == 27 && TRUE_TIME_PATTERN.test(date)) {
+	} else if (typeof date == "string" && date.length == 27 && TRUE_TIME_PATTERN.test(date)) {
 		this.date = date;
 
 		this.parse();
 
-	} else if (truly(date) && protype(date, STRING)) {
+	} else if (truly(date) && typeof date == "string") {
 		try {
 			date = moment(date);
 
@@ -236,7 +235,7 @@ Ethernity.prototype.persist = function persist() {
 Ethernity.prototype.parse = function parse() {
 	var date = this.date;
 
-	if (protype(this.date, STRING)) {
+	if (typeof this.date == "string") {
 		date = U200b(this.date).separate();
 
 	} else if (truly(this.trueTime)) {
@@ -373,7 +372,7 @@ Ethernity.prototype.printTime = function printTime(separator, complete) {
 	separator = optfor(parameter, STRING);
 
 	separator = separator || DEFAULT_SEPARATOR;
-	if (!protype(separator, STRING)) {
+	if (typeof separator != "string") {
 		separator = DEFAULT_SEPARATOR;
 	}
 

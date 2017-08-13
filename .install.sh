@@ -9,7 +9,6 @@ falzy \
 harden \
 moment \
 optfor \
-protype \
 raze \
 stringe \
 truly \
@@ -33,7 +32,6 @@ falzy \
 harden \
 moment \
 optfor \
-protype \
 raze \
 stringe \
 truly \
