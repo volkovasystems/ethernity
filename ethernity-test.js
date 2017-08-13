@@ -27,6 +27,6 @@ assert.deepEqual( compact1, [ 20160815044745, 480 ], "should be equal to [ 20160
 let comparison1 = Ethernity( ethernity_time ).parse( );
 let comparison2 = Ethernity( compact1 ).parse( );
 assert.deepEqual( comparison1.trueTime, comparison2.trueTime,
-	"should have the same trueTime regards of how many times it was parse" );
+	"should have the same trueTime regardless of how many times it was parse" );
 
 console.log( "ok" );
