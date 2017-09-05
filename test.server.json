@@ -1,16 +1,32 @@
 {
-  "stats": {
-    "suites": 0,
-    "tests": 0,
-    "passes": 0,
-    "pending": 0,
-    "failures": 0,
-    "start": "2017-09-01T16:42:27.815Z",
-    "end": "2017-09-01T16:42:27.815Z",
-    "duration": 0
-  },
-  "tests": [],
-  "pending": [],
-  "failures": [],
-  "passes": []
+	"stats": {
+		"suites": 2,
+		"tests": 1,
+		"passes": 1,
+		"pending": 0,
+		"failures": 0,
+		"start": "2017-09-05T04:32:00.732Z",
+		"end": "2017-09-05T04:32:00.751Z",
+		"duration": 19
+	},
+	"tests": [
+		{
+			"title": "should persist time as true time",
+			"fullTitle": "Ethernity `Ethernity( new Date( '8/15/2016 12:47:45 PM' ) )` should persist time as true time",
+			"duration": 16,
+			"currentRetry": 0,
+			"err": {}
+		}
+	],
+	"pending": [],
+	"failures": [],
+	"passes": [
+		{
+			"title": "should persist time as true time",
+			"fullTitle": "Ethernity `Ethernity( new Date( '8/15/2016 12:47:45 PM' ) )` should persist time as true time",
+			"duration": 16,
+			"currentRetry": 0,
+			"err": {}
+		}
+	]
 }

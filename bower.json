@@ -24,5 +24,23 @@
 		"bower_components",
 		"test",
 		"tests"
-	]
+	],
+	"resolutions": {
+		"stringe": "^0.6.0"
+	},
+	"dependencies": {
+		"clazof": "^0.36.0",
+		"depher": "^0.38.0",
+		"diatom": "^0.34.0",
+		"doubt": "^0.34.0",
+		"falze": "^0.26.0",
+		"falzy": "^0.23.0",
+		"harden": "^0.23.0",
+		"moment": "^2.18.1",
+		"optfor": "^0.33.0",
+		"raze": "^0.34.0",
+		"stringe": "^0.6.0",
+		"truly": "^0.20.0",
+		"u200b": "^0.35.0"
+	}
 }

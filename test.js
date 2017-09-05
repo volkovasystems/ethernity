@@ -54,7 +54,7 @@
 const assert = require( "should" );
 
 //: @server:
-const ethernity = require( "./ethernity.js" );
+const Ethernity = require( "./ethernity.js" );
 //: @end-server
 
 
@@ -63,11 +63,41 @@ const ethernity = require( "./ethernity.js" );
 
 
 //: @server:
+describe( "Ethernity", ( ) => {
 
-describe( "ethernity", ( ) => {
+	describe( "`Ethernity( new Date( '8/15/2016 12:47:45 PM' ) )`", ( ) => {
+		it( "should persist time as true time", ( ) => {
+			let data = Ethernity( new Date( "8/15/2016 12:47:45 PM" ) );
+
+			let printTime = data.printTime( );
+			assert.equal( printTime, "August 15, 2016 | 12:47:45 PM" );
+
+			let getTime = data.getTime( );
+			assert.equal( getTime, "12:47:45 PM" );
+
+			let getDate = data.getDate( );
+			assert.equal( getDate, "August 15, 2016" );
+
+			let realTime = data.realTime( );
+			assert.equal( realTime, "2016-08-15T04:47:45" );
+
+			let relativeTime = data.relativeTime( );
+			assert.equal( relativeTime, "2016-08-15T12:47:45" );
+
+			let trueTime = data.trueTime;
+			assert.equal( trueTime, "0​2016​08​15​04​47​45​00480" );
+
+			let compactA = data.compact( );
+			assert.deepEqual( compactA, [ 20160815044745, 480 ] );
+
+			let parseA = Ethernity( trueTime ).parse( );
+			let parseB = Ethernity( compactA ).parse( );
+
+			assert.deepEqual( parseA.trueTime, parseB.trueTime );
+		} );
+	} );
 
 } );
-
 //: @end-server
 
 
